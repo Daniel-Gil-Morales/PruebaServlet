@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.example</groupId>
+  <artifactId>Prueba</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Prueba Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Dependencia par el uso de Servlets -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
+      <scope>provided</scope> <!-- Esto indica que el contenedor del servidor (como Tomcat, Jetty, o cualquier servidor de aplicaciones compatible con Jakarta EE) proporcionará esta dependencia en tiempo de ejecución. -->
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.1.0-alpha1</version>
+    </dependency>
+
+    <!-- Dependencia par usar variables de entorno -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <!-- Dependencia par usar la base de datos MARIADB -->
+    <dependency>
+      <groupId>org.mariadb.jdbc</groupId>
+      <artifactId>mariadb-java-client</artifactId>
+      <version>3.4.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.34</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>dwese-ticket-logger-servlet</finalName>
+
+    <plugins>
+      <!-- Plugin para compilación de código fuente -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>21</source> <!-- La versión de JDK que estamos usando -->
+          <target>21</target> <!-- La versión de JDK que estamos usando -->
+        </configuration>
+      </plugin>
+
+      <!-- Plugin para la generación de javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <source>21</source> <!-- La versión de JDK que estamos usando -->
+          <additionalJOption>-Xdoclint:none</additionalJOption> <!-- Opcional: Ignora los errores de JavaDoc -->
+          <encoding>UTF-8</encoding>
+          <docencoding>UTF-8</docencoding>
+          <charset>UTF-8</charset>
+          <show>private</show> <!-- Incluye métodos privados en la documentación -->
+          <noindex>false</noindex> <!-- Genera el índice de todos los elementos -->
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>javadoc</goal> <!-- El objetivo principal es generar JavaDoc -->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Plugin de Servidor Jetty embebido -->
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>11.0.24</version> <!-- Versión compatible con Jakarta EE 9+ -->
+        <configuration>
+          <webApp>
+            <contextPath>/</contextPath>
+          </webApp>
+          <httpConnector>
+            <port>8080</port>
+          </httpConnector>
+          <!-- Configuración para la depuración remota -->
+          <jvmArgs>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005</jvmArgs>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+    <!-- Se añade el fitering true para poder usar variables del pom.xml en tiempo de compilación -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
+</project>
